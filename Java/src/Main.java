@@ -83,16 +83,28 @@ public class Main {
     }
 
     public static void processingTimeFirstMethod() {
-        for (int i = 600; i <= 3000; i += 400)
+        for (int i = 600; i <= 3000; i += 400) {
+            System.out.println("----");
+            System.out.println("Size: " + i);
+
             multiplication(i, i);
+        }
     }
 
     public static void processingTimeSecondMethod() {
-        for (int i = 600; i <= 3000; i += 400)
-            lineMultiplication(i, i);
+        for (int i = 600; i <= 3000; i += 400) {
+            System.out.println("----");
+            System.out.println("Size: " + i);
 
-        for (int i = 4000; i <= 10000; i += 2000)
             lineMultiplication(i, i);
+        }
+
+        for (int i = 4000; i <= 10000; i += 2000) {
+            System.out.println("----");
+            System.out.println("Size: " + i);
+
+            lineMultiplication(i, i);
+        }
     }
 
     public static void main(String[] args) {
@@ -112,23 +124,28 @@ public class Main {
             if (op == 0)
                 break;
 
-            System.out.println("Dimensions: lines cols");
+            int lin = 0, col = 0;
+            String[] split = null;
 
-            in = new Scanner(System.in);
+            if (op == 1 || op == 2) {
+                System.out.println("Dimensions: lines cols");
 
-            String input = in.nextLine();
-            String[] split = input.split("\\s+");
+                in = new Scanner(System.in);
 
-            if (split.length != 2) {
-                System.out.println("Wrong number of arguments!");
+                String input = in.nextLine();
+                split = input.split("\\s+");
 
-                main(null);
+                if (split.length != 2) {
+                    System.out.println("Wrong number of arguments!");
 
-                break;
+                    main(null);
+
+                    break;
+                }
+
+                lin = Integer.parseInt(split[0]);
+                col = Integer.parseInt(split[1]);
             }
-
-            int lin = Integer.parseInt(split[0]);
-            int col = Integer.parseInt(split[1]);
 
             switch (op) {
                 case 1:
