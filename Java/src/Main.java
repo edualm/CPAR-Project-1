@@ -62,10 +62,8 @@ public class Main {
 
         for (int i=0;  i < m_ar; i++) {
             for (int k = 0; k < m_ar; k++) {
-
                 for (int j = 0; j < m_br; j++)
                     phc[i * m_ar + j] += pha[i * m_ar + j] * phb[k * m_br + j];
-
             }
         }
 
