@@ -45,7 +45,6 @@ public class Main {
     }
 
     public static void lineMultiplication(int m_ar, int m_br) {
-        double temp;
 
         double[] pha = new double[m_ar * m_br];
         double[] phb = new double[m_ar * m_br];
@@ -61,16 +60,14 @@ public class Main {
 
         long timeStart = System.currentTimeMillis();
 
-        /*  for (int i=0;  i < m_ar; i++) {
+        for (int i=0;  i < m_ar; i++) {
             for (int k = 0; k < m_ar; k++) {
-                temp = 0;
 
-                 for (int j = 0; j < m_br; j++)
-                    temp += pha[i * m_ar + k] * phb[k * m_br + j];
+                for (int j = 0; j < m_br; j++)
+                    phc[i * m_ar + j] += pha[i * m_ar + j] * phb[k * m_br + j];
 
-                phc[i * m_ar + j] = temp;
             }
-        }   */
+        }
 
         long timeEnd = System.currentTimeMillis();
 
