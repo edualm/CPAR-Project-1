@@ -82,6 +82,19 @@ public class Main {
         System.out.println();
     }
 
+    public static void processingTimeFirstMethod() {
+        for (int i = 600; i <= 3000; i += 400)
+            multiplication(i, i);
+    }
+
+    public static void processingTimeSecondMethod() {
+        for (int i = 600; i <= 3000; i += 400)
+            lineMultiplication(i, i);
+
+        for (int i = 4000; i <= 10000; i += 2000)
+            lineMultiplication(i, i);
+    }
+
     public static void main(String[] args) {
         int op;
 
@@ -90,6 +103,8 @@ public class Main {
             System.out.println();
             System.out.println("1. Multiplication");
             System.out.println("2. Line Multiplication");
+            System.out.println("3. Tests #1");
+            System.out.println("4. Tests #2");
 
             Scanner in = new Scanner(System.in);
             op = in.nextInt();
@@ -125,6 +140,18 @@ public class Main {
                 case 2:
 
                     lineMultiplication(lin, col);
+
+                    break;
+
+                case 3:
+
+                    processingTimeFirstMethod();
+
+                    break;
+
+                case 4:
+
+                    processingTimeSecondMethod();
 
                     break;
 
