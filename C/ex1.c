@@ -45,7 +45,7 @@ void OnMult(int m_ar, int m_br)
     
     
     
-    Time1 = clock();
+    Time1 = omp_get_wtime();
     
     for(i=0; i<m_ar; i++)
     {	for( j=0; j<m_br; j++)
@@ -59,7 +59,7 @@ void OnMult(int m_ar, int m_br)
     }
     
     
-    Time2 = clock();
+    Time2 = omp_get_wtime();
     sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
     cout << st;
     
@@ -107,7 +107,7 @@ void OnMultLine(int m_ar, int m_br)
     
     
     
-    Time1 = clock();
+    Time1 = omp_get_wtime();
     
     for (i=0;  i < m_ar; i++) {
         for (k = 0; k < m_ar; k++) {
@@ -116,7 +116,7 @@ void OnMultLine(int m_ar, int m_br)
         }
     }
     
-    Time2 = clock();
+    Time2 = omp_get_wtime();
     sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
     cout << st;
     
@@ -159,7 +159,7 @@ void ParOnMult(int m_ar, int m_br) {
         for(j=0; j<m_br; j++)
             phb[i*m_br + j] = (double)(i+1);
     
-    Time1 = clock();
+    Time1 = omp_get_wtime();
     
 #pragma omp parallel private(i, j, temp) num_threads(8)
     for(i=0; i<m_ar; i++) {
@@ -176,7 +176,7 @@ void ParOnMult(int m_ar, int m_br) {
     }
     
     
-    Time2 = clock();
+    Time2 = omp_get_wtime();
     sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
     cout << st;
     
@@ -221,7 +221,7 @@ void ParOnMultLine(int m_ar, int m_br)
     
     
     
-    Time1 = clock();
+    Time1 = omp_get_wtime();
     
     for (i=0;  i < m_ar; i++) {
         for (k = 0; k < m_ar; k++) {
@@ -232,7 +232,7 @@ void ParOnMultLine(int m_ar, int m_br)
         }
     }
     
-    Time2 = clock();
+    Time2 = omp_get_wtime();
     sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
     cout << st;
     
