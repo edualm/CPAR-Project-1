@@ -133,7 +133,7 @@ void OnMultLine(int m_ar, int m_br)
 }
 
 void ParOnMult(int m_ar, int m_br) {
-    omp_set_num_threads();
+    //  omp_set_num_threads();
     
     SYSTEMTIME Time1, Time2;
     
