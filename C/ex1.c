@@ -60,7 +60,7 @@ void OnMult(int m_ar, int m_br)
     
     
     Time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1));
     cout << st;
     
     cout << "Result matrix: " << endl;
@@ -117,7 +117,7 @@ void OnMultLine(int m_ar, int m_br)
     }
     
     Time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1));
     cout << st;
     
     cout << "Result matrix: " << endl;
@@ -177,7 +177,7 @@ void ParOnMult(int m_ar, int m_br) {
     
     
     Time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1));
     cout << st;
     
     cout << "Result matrix: " << endl;
@@ -233,7 +233,7 @@ void ParOnMultLine(int m_ar, int m_br)
     }
     
     Time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+    sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1));
     cout << st;
     
     cout << "Result matrix: " << endl;
