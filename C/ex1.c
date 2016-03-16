@@ -344,6 +344,16 @@ int main (int argc, char *argv[])
                 OnMultLine(lin, col);
                 
                 break;
+                
+            case 3:
+                ParOnMult(lin, col);
+                
+                break;
+                
+            case 4:
+                ParOnMultLine(lin, col);
+                
+                break;
         }
         
 #if PAPI
