@@ -133,7 +133,7 @@ void OnMultLine(int m_ar, int m_br)
 }
 
 void ParOnMult(int m_ar, int m_br) {
-    //  omp_set_num_threads();
+    //    omp_set_num_threads(4);
     
     SYSTEMTIME Time1, Time2;
     
@@ -149,24 +149,24 @@ void ParOnMult(int m_ar, int m_br) {
     phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
     phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
     
-#pragma omp parallel for private(j)
+#pragma omp parallel for private(j) num_threads(8)
     for(i=0; i<m_ar; i++)
         for(j=0; j<m_ar; j++)
             pha[i*m_ar + j] = (double)1.0;
     
-#pragma omp parallel for private(j)
+#pragma omp parallel for private(j) num_threads(8)
     for(i=0; i<m_br; i++)
         for(j=0; j<m_br; j++)
             phb[i*m_br + j] = (double)(i+1);
     
     Time1 = clock();
     
-#pragma omp parallel private(i, j, temp)
+#pragma omp parallel private(i, j, temp) num_threads(8)
     for(i=0; i<m_ar; i++) {
         for(j=0; j<m_br; j++) {
             temp = 0;
             
-#pragma omp parallel for reduction(+:temp)
+#pragma omp parallel for reduction(+:temp) num_threads(8)
             for( k=0; k<m_ar; k++) {
                 temp += pha[i*m_ar+k] * phb[k*m_br+j];
             }
