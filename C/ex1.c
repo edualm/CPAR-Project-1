@@ -144,7 +144,7 @@ void ParOnMult(int m_ar, int m_br) {
             temp = 0;
 
 #pragma omp parallel for reduction(+:temp) num_threads(nt)
-            for (k=0; k < m_ar; k++) {
+            for (k = 0; k < m_ar; k++) {
                 temp += pha[i * m_ar + k] * phb[k * m_br + j];
             }
 
@@ -295,7 +295,7 @@ int main (int argc, char *argv[]) {
         cout << endl << "1. Multiplication" << endl;
         cout << "2. Line Multiplication" << endl;
         cout << "3. Parallel Multiplication" << endl;
-        cout << "3. Parallel Line Multiplication" << endl;
+        cout << "4. Parallel Line Multiplication" << endl;
 
         cout << "Selection?: ";
         cin >> op;
