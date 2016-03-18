@@ -13,7 +13,21 @@
 
 using namespace std;
 
+int nt = 4;
+
+int EventSet;
+
+long long values[2];
+
 void OnMult(int m_ar, int m_br) {
+    int ret;
+
+#if PAPI
+        ret = PAPI_start(EventSet);
+
+        if (ret != PAPI_OK) cout << "ERRO: Start PAPI" << endl;
+#endif
+
     double time1, time2;
 
     char st[100];
@@ -61,10 +75,34 @@ void OnMult(int m_ar, int m_br) {
     free(pha);
     free(phb);
     free(phc);
+
+    #if PAPI
+
+            ret = PAPI_stop(EventSet, values);
+
+            if (ret != PAPI_OK)
+                cout << "ERRO: Stop PAPI" << endl;
+
+            printf("L1 DCM: %lld \n",values[0]);
+            printf("L2 DCM: %lld \n",values[1]);
+
+            ret = PAPI_reset(EventSet);
+
+            if (ret != PAPI_OK)
+                std::cout << "FAIL reset" << endl;
+
+    #endif
 }
 
-
 void OnMultLine(int m_ar, int m_br) {
+    int ret;
+
+    #if PAPI
+            ret = PAPI_start(EventSet);
+
+            if (ret != PAPI_OK) cout << "ERRO: Start PAPI" << endl;
+    #endif
+
     double time1, time2;
 
     char st[100];
@@ -109,10 +147,33 @@ void OnMultLine(int m_ar, int m_br) {
     free(pha);
     free(phb);
     free(phc);
+
+    #if PAPI
+
+            ret = PAPI_stop(EventSet, values);
+
+            if (ret != PAPI_OK)
+                cout << "ERRO: Stop PAPI" << endl;
+
+            printf("L1 DCM: %lld \n",values[0]);
+            printf("L2 DCM: %lld \n",values[1]);
+
+            ret = PAPI_reset(EventSet);
+
+            if (ret != PAPI_OK)
+                std::cout << "FAIL reset" << endl;
+
+    #endif
 }
 
 void ParOnMult(int m_ar, int m_br) {
-    int nt = 4;
+    int ret;
+
+    #if PAPI
+            ret = PAPI_start(EventSet);
+
+            if (ret != PAPI_OK) cout << "ERRO: Start PAPI" << endl;
+    #endif
 
     double time1, time2;
 
@@ -138,7 +199,6 @@ void ParOnMult(int m_ar, int m_br) {
 
     time1 = omp_get_wtime();
 
-#pragma omp parallel private(i, j, temp) num_threads(nt)
     for(i = 0; i < m_ar; i++) {
         for(j = 0; j < m_br; j++) {
             temp = 0;
@@ -167,9 +227,34 @@ void ParOnMult(int m_ar, int m_br) {
     free(pha);
     free(phb);
     free(phc);
+
+    #if PAPI
+
+            ret = PAPI_stop(EventSet, values);
+
+            if (ret != PAPI_OK)
+                cout << "ERRO: Stop PAPI" << endl;
+
+            printf("L1 DCM: %lld \n",values[0]);
+            printf("L2 DCM: %lld \n",values[1]);
+
+            ret = PAPI_reset(EventSet);
+
+            if (ret != PAPI_OK)
+                std::cout << "FAIL reset" << endl;
+
+    #endif
 }
 
 void ParOnMultLine(int m_ar, int m_br) {
+    int ret;
+
+    #if PAPI
+            ret = PAPI_start(EventSet);
+
+            if (ret != PAPI_OK) cout << "ERRO: Start PAPI" << endl;
+    #endif
+
     double time1, time2;
 
     char st[100];
@@ -182,20 +267,22 @@ void ParOnMultLine(int m_ar, int m_br) {
     phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
     phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
 
+#pragma omp parallel for private(j) num_threads(nt)
     for (i = 0; i < m_ar; i++)
         for (j = 0; j < m_ar; j++)
             pha[i * m_ar + j] = (double) 1.0;
 
+#pragma omp parallel for private(j) num_threads(nt)
     for (i = 0; i < m_br; i++)
         for (j = 0; j < m_br; j++)
-            phb[i * m_br + j] = (double)(i+1);
+            phb[i * m_br + j] = (double) (i+1);
 
     time1 = omp_get_wtime();
 
-    for (i = 0; i < m_ar; i++) {
+#pragma omp parallel for private(k, j) num_threads(nt)
+    for (i=0; i < m_ar; i++) {
         for (k = 0; k < m_ar; k++) {
             for (j = 0; j < m_br; j++) {
-#pragma mark critical
                 phc[i * m_ar + j] += pha[i * m_ar + j] * phb[k * m_br + j];
             }
         }
@@ -206,8 +293,9 @@ void ParOnMultLine(int m_ar, int m_br) {
     cout << st;
 
     cout << "Result matrix: " << endl;
+
     for (i = 0; i < 1; i++)
-        for (j = 0; j < min(10, m_br); j++)
+        for (j = 0; j < min(10,m_br); j++)
           cout << phc[j] << " ";
 
     cout << endl;
@@ -215,6 +303,24 @@ void ParOnMultLine(int m_ar, int m_br) {
     free(pha);
     free(phb);
     free(phc);
+
+    #if PAPI
+
+            ret = PAPI_stop(EventSet, values);
+
+            if (ret != PAPI_OK)
+                cout << "ERRO: Stop PAPI" << endl;
+
+            printf("L1 DCM: %lld \n",values[0]);
+            printf("L2 DCM: %lld \n",values[1]);
+
+            ret = PAPI_reset(EventSet);
+
+            if (ret != PAPI_OK)
+                std::cout << "FAIL reset" << endl;
+
+    #endif
+
 }
 
 void handle_error(int retval) {
@@ -226,6 +332,33 @@ void handle_error(int retval) {
 
     exit(1);
 
+}
+
+void run_tests() {
+    for (nt = 1; nt <= 4; nt++) {
+        cout << "<---------->" << endl;
+        cout << "Thread Count: " << nt << endl;
+
+        for (int x = 600; x <= 3000; x += 400) {
+            cout << "Size: " << x << endl;
+
+            if (nt == 1) {
+                cout << "OnMult" << endl;
+                OnMult(x, x);
+
+                cout << "OnMultLine" << endl;
+                OnMultLine(x, x);
+            }
+
+            cout << "ParOnMult" << endl;
+            ParOnMult(x, x);
+
+            cout << "ParOnMultLine" << endl;
+            ParOnMultLine(x, x);
+
+            cout << "-----" << endl;
+        }
+    }
 }
 
 void init_papi() {
@@ -253,19 +386,19 @@ int main (int argc, char *argv[]) {
     char c;
     int lin, col, nt = 1;
     int op;
+    int ret = 0;
 
 #if PAPI
 
-    int EventSet = PAPI_NULL;
+    EventSet = PAPI_NULL;
 
 #else
 
-    int EventSet = 0;
+    EventSet = 0;
 
 #endif
 
-    long long values[2];
-    int ret;
+    init_papi();
 
 #if PAPI
 
@@ -291,6 +424,9 @@ int main (int argc, char *argv[]) {
 #endif
 
     op = 1;
+
+    run_tests();
+
     do {
         cout << endl << "1. Multiplication" << endl;
         cout << "2. Line Multiplication" << endl;
@@ -307,11 +443,6 @@ int main (int argc, char *argv[]) {
         cin >> lin >> col;
 
         // Start counting
-#if PAPI
-        ret = PAPI_start(EventSet);
-
-        if (ret != PAPI_OK) cout << "ERRO: Start PAPI" << endl;
-#endif
 
         switch (op) {
         case 1:
@@ -333,23 +464,6 @@ int main (int argc, char *argv[]) {
 
             break;
         }
-
-#if PAPI
-
-        ret = PAPI_stop(EventSet, values);
-
-        if (ret != PAPI_OK)
-            cout << "ERRO: Stop PAPI" << endl;
-
-        printf("L1 DCM: %lld \n",values[0]);
-        printf("L2 DCM: %lld \n",values[1]);
-
-        ret = PAPI_reset(EventSet);
-
-        if (ret != PAPI_OK)
-            std::cout << "FAIL reset" << endl;
-
-#endif
 
     } while (op != 0);
 
