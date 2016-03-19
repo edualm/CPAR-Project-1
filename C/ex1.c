@@ -13,9 +13,7 @@
 
 using namespace std;
 
-int nt = 4;
-
-int EventSet;
+int nt = 4, EventSet = 0;
 
 long long values[2];
 
@@ -62,15 +60,6 @@ void OnMult(int m_ar, int m_br) {
     }
 
     time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(time2 - time1));
-    cout << st;
-
-    cout << "Result matrix: " << endl;
-    for (i = 0; i < 1; i++)
-        for (j = 0; j < min(10, m_br); j++)
-          cout << phc[j] << " ";
-
-    cout << endl;
 
     free(pha);
     free(phb);
@@ -83,8 +72,7 @@ void OnMult(int m_ar, int m_br) {
             if (ret != PAPI_OK)
                 cout << "ERRO: Stop PAPI" << endl;
 
-            printf("L1 DCM: %lld \n",values[0]);
-            printf("L2 DCM: %lld \n",values[1]);
+            cout << "OnMult" << "," << m_ar << "," << m_br << "," << (double)(time2 - time1) << "," << values[0] << "," << values[1] << endl;
 
             ret = PAPI_reset(EventSet);
 
@@ -133,16 +121,6 @@ void OnMultLine(int m_ar, int m_br) {
     }
 
     time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(time2 - time1));
-    cout << st;
-
-    cout << "Result matrix: " << endl;
-
-    for (i = 0; i < 1; i++)
-        for (j = 0; j < min(10,m_br); j++)
-          cout << phc[j] << " ";
-
-    cout << endl;
 
     free(pha);
     free(phb);
@@ -155,8 +133,7 @@ void OnMultLine(int m_ar, int m_br) {
             if (ret != PAPI_OK)
                 cout << "ERRO: Stop PAPI" << endl;
 
-            printf("L1 DCM: %lld \n",values[0]);
-            printf("L2 DCM: %lld \n",values[1]);
+            cout << "OnMultLine" << "," << m_ar << "," << m_br << "," << (double)(time2 - time1) << "," << values[0] << "," << values[1] << endl;
 
             ret = PAPI_reset(EventSet);
 
@@ -213,16 +190,6 @@ void ParOnMult(int m_ar, int m_br) {
     }
 
     time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(time2 - time1));
-    cout << st;
-
-    cout << "Result matrix: " << endl;
-
-    for (i = 0; i < 1; i++)
-        for (j = 0; j < min(10, m_br); j++)
-          cout << phc[j] << " ";
-
-    cout << endl;
 
     free(pha);
     free(phb);
@@ -235,8 +202,7 @@ void ParOnMult(int m_ar, int m_br) {
             if (ret != PAPI_OK)
                 cout << "ERRO: Stop PAPI" << endl;
 
-            printf("L1 DCM: %lld \n",values[0]);
-            printf("L2 DCM: %lld \n",values[1]);
+            cout << "ParOnMult" << "," << m_ar << "," << m_br << "," << (double)(time2 - time1) << "," << values[0] << "," << values[1] << endl;
 
             ret = PAPI_reset(EventSet);
 
@@ -289,16 +255,6 @@ void ParOnMultLine(int m_ar, int m_br) {
     }
 
     time2 = omp_get_wtime();
-    sprintf(st, "Time: %3.3f seconds\n", (double)(time2 - time1));
-    cout << st;
-
-    cout << "Result matrix: " << endl;
-
-    for (i = 0; i < 1; i++)
-        for (j = 0; j < min(10,m_br); j++)
-          cout << phc[j] << " ";
-
-    cout << endl;
 
     free(pha);
     free(phb);
@@ -311,8 +267,7 @@ void ParOnMultLine(int m_ar, int m_br) {
             if (ret != PAPI_OK)
                 cout << "ERRO: Stop PAPI" << endl;
 
-            printf("L1 DCM: %lld \n",values[0]);
-            printf("L2 DCM: %lld \n",values[1]);
+            cout << "ParOnMultLine" << "," << m_ar << "," << m_br << "," << (double)(time2 - time1) << "," << values[0] << "," << values[1] << endl;
 
             ret = PAPI_reset(EventSet);
 
@@ -335,34 +290,36 @@ void handle_error(int retval) {
 }
 
 void run_tests() {
-    for (nt = 1; nt <= 4; nt++) {
-        cout << "<---------->" << endl;
-        cout << "Thread Count: " << nt << endl;
+    cout << endl << endl << "<-----> OnMult" << endl << endl;
 
-        for (int x = 600; x <= 3000; x += 400) {
-            cout << "Size: " << x << endl;
+    for (int x = 600; x <= 3000; x += 400)
+        OnMult(x, x);
 
-            if (nt == 1) {
-                cout << "OnMult" << endl;
-                OnMult(x, x);
+    cout << endl << endl << "<-----> OnMultLine" << endl << endl;
 
-                cout << "OnMultLine" << endl;
-                OnMultLine(x, x);
-            }
+    for (int x = 600; x <= 3000; x += 400)
+        OnMultLine(x, x);
 
-            cout << "ParOnMult" << endl;
+    for (int x = 4000; x <= 10000; x += 2000)
+        OnMultLine(x, x);
+
+    cout << endl << endl << "<-----> ParOnMult" << endl << endl;
+
+    for (nt = 1; nt <= 4; nt++)
+        for (int x = 600; x <= 3000; x += 400)
             ParOnMult(x, x);
 
-            cout << "ParOnMultLine" << endl;
-            ParOnMultLine(x, x);
+    cout << endl << endl << "<-----> ParOnMultLine" << endl << endl;
 
-            cout << "-----" << endl;
-        }
-    }
+    for (nt = 1; nt <= 4; nt++)
+        for (int x = 600; x <= 3000; x += 400)
+            ParOnMultLine(x, x);
 }
 
 void init_papi() {
 #if PAPI
+
+    EventSet = PAPI_NULL;
 
     int retval = PAPI_library_init(PAPI_VER_CURRENT);
 
@@ -379,6 +336,25 @@ void init_papi() {
           << " MINOR: " << PAPI_VERSION_MINOR(retval)
           << " REVISION: " << PAPI_VERSION_REVISION(retval) << "\n";
 
+    retval = PAPI_library_init(PAPI_VER_CURRENT);
+    if (retval != PAPI_VER_CURRENT)
+        std::cout << "FAIL" << endl;
+
+    retval = PAPI_create_eventset(&EventSet);
+
+    if (retval != PAPI_OK)
+        cout << "ERRO: create eventset" << endl;
+
+    retval = PAPI_add_event(EventSet,PAPI_L1_DCM );
+
+    if (retval != PAPI_OK)
+        cout << "ERRO: PAPI_L1_DCM" << endl;
+
+    retval = PAPI_add_event(EventSet,PAPI_L2_DCM);
+
+    if (retval != PAPI_OK)
+        cout << "ERRO: PAPI_L2_DCM" << endl;
+
 #endif
 }
 
@@ -388,40 +364,7 @@ int main (int argc, char *argv[]) {
     int op;
     int ret = 0;
 
-#if PAPI
-
-    EventSet = PAPI_NULL;
-
-#else
-
-    EventSet = 0;
-
-#endif
-
     init_papi();
-
-#if PAPI
-
-    ret = PAPI_library_init(PAPI_VER_CURRENT);
-    if (ret != PAPI_VER_CURRENT)
-        std::cout << "FAIL" << endl;
-
-    ret = PAPI_create_eventset(&EventSet);
-
-    if (ret != PAPI_OK)
-        cout << "ERRO: create eventset" << endl;
-
-    ret = PAPI_add_event(EventSet,PAPI_L1_DCM );
-
-    if (ret != PAPI_OK)
-        cout << "ERRO: PAPI_L1_DCM" << endl;
-
-    ret = PAPI_add_event(EventSet,PAPI_L2_DCM);
-
-    if (ret != PAPI_OK)
-        cout << "ERRO: PAPI_L2_DCM" << endl;
-
-#endif
 
     op = 1;
 
