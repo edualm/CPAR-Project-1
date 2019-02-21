@@ -1,8 +1,4 @@
-VPS Details
+CPAR Project 1
 -----------
 
-**IP**: 188.166.147.107
-
-**Username**: root
-
-**Password**: 2QTdWqNDsd8Fuo
+Some stuff that makes use of CPU caches.
